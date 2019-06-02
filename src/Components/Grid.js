@@ -32,7 +32,9 @@ export default class Grid extends React.Component {
             const data = res.data;
             this.setState({ data }, () => {
                 this.setDefaultFilters();
-                this.displayPage(1, 0, 4);
+                setTimeout(() => {
+                    this.displayPage(1, 0, 4);
+                }, 1000);
             });
       })
     }
@@ -59,8 +61,8 @@ export default class Grid extends React.Component {
         debugger;
         this.setState({
             filterCriteriaList: formattedFilterCriteriaList,
-            filterFrom: criteriaList[0],
-            filterTo: criteriaList[criteriaList.length - 1]
+            filterFrom: formattedFilterCriteriaList[0],
+            filterTo: formattedFilterCriteriaList[criteriaList.length - 1]
         }, () => this.filterData(this.state.filterFrom, this.state.filterTo));
     }
 
@@ -78,15 +80,23 @@ export default class Grid extends React.Component {
 
     filterData(from, to){
         debugger;
-        let filteredData = this.state.data.filter((item) => {
-            let criteria = item.first_brewed.split("/");
-            let date = this.formatDateCriteria(criteria);
-
-            return (date >= from) && (date <= to);
-        });
-        debugger;
         this.setState({
-            filteredData: filteredData
+            filterFrom: from,
+            filterTo: to
+        }, () => {
+            let formattedFrom = this.formatDateCriteria(from.split("/"));
+            let formattedTo = this.formatDateCriteria(to.split("/"));
+            debugger;
+            let filteredData = this.state.data.filter((item) => {
+                let criteria = item.first_brewed.split("/");
+                let date = this.formatDateCriteria(criteria);
+
+                return (date >= formattedFrom) && (date <= formattedTo);
+            });
+            debugger;
+            this.setState({
+                filteredData: filteredData
+            });
         });
     }
 
@@ -119,7 +129,7 @@ export default class Grid extends React.Component {
                         )
                     })
                 }
-                <Paginator itemsPerPage={4} itemTotalCount={this.state.data.length} displayPage={(pageNumber, firstItemIndex, lastItemIndex) => this.displayPage(pageNumber, firstItemIndex, lastItemIndex)}/>
+                <Paginator itemsPerPage={4} itemTotalCount={this.state.filteredData.length} displayPage={(pageNumber, firstItemIndex, lastItemIndex) => this.displayPage(pageNumber, firstItemIndex, lastItemIndex)}/>
             </div>
         )
     }

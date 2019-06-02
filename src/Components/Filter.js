@@ -6,8 +6,8 @@ export default class Filter extends React.Component {
         super(props);
         this.state = {
             filterList: [],
-            from: null,
-            to: null
+            from: "",
+            to: ""
         }
 
         this.setFromCriteria = this.setFromCriteria.bind(this);
@@ -18,9 +18,10 @@ export default class Filter extends React.Component {
     componentWillReceiveProps(nextProps){
         this.setState({
             filterList: nextProps.filterList,
-            from: nextProps.from,
-            to: nextProps.to
+            from: nextProps.from ? nextProps.from : "",
+            to: nextProps.to ? nextProps.to : ""
         });
+        debugger;
     }
 
     setFromCriteria(e){
@@ -49,7 +50,7 @@ export default class Filter extends React.Component {
                 </div>
                 <div>
                     <label>Between</label>
-                    <select value="" onChange={(e) => this.setFromCriteria(e)}>
+                    <select value={this.state.from} onChange={(e) => this.setFromCriteria(e)}>
                         {
                             this.state.filterList.map((item, i) => {
                               return(
@@ -61,7 +62,7 @@ export default class Filter extends React.Component {
                 </div>
                 <div>
                     <label>And</label>
-                    <select  value="" onChange={(e) => this.setToCriteria(e)}>
+                    <select  value={this.state.to} onChange={(e) => this.setToCriteria(e)}>
                         {
                             this.state.filterList.map((item, i) => {
                               return(
