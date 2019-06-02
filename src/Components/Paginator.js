@@ -1,6 +1,5 @@
 import React from 'react';
 import '../Css/Paginator.css';
-import { tsImportEqualsDeclaration } from '@babel/types';
 
 export default class Paginator extends React.Component {
     constructor(props) {
@@ -14,6 +13,7 @@ export default class Paginator extends React.Component {
             firstItemIndex: 0,
             lastItemIndex: 0
         }
+
         this.handlePageSelection = this.handlePageSelection.bind(this);
         this.setCurrentPage = this.setCurrentPage.bind(this);
    }
