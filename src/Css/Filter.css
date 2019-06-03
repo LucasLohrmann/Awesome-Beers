@@ -36,8 +36,9 @@ label{
 }
 
 .filterButton{
-    font-size: 12px;
+    font-size: 16px;
+    font-weight: 600;
     margin: 2px;
-    height: 30px;
-    width: 40px;
+    height: 40px;
+    width: 70px;
 }
