@@ -17,7 +17,22 @@ export default class GridItem extends React.Component {
 
     render() {
          return (
-            <div>{this.state.item.name}</div>
+            <div className="gridItemContainer col-xs-5 col-sm-5 col-md-5 col-lg-5">
+                <div className="textContainer">
+                    <div className="itemName">
+                        {this.state.item.name}
+                    </div>
+                    <div className="itemTag">
+                        {this.state.item.tagline}
+                    </div>
+                    <div className="itemDescription" title={this.state.item.description}>
+                        {this.state.item.description}
+                    </div>
+                </div>
+                <div className="imageContainer">
+                        <img src={this.state.item.image_url}/>
+                </div>
+            </div>
          );
     }
 }

@@ -15,7 +15,8 @@ export default class Grid extends React.Component {
             paginatedData: [],
             filterCriteriaList: [],
             filterTo: null,
-            filterFrom: null
+            filterFrom: null,
+            pageNumber: 1
         }
 
         this.displayPage = this.displayPage.bind(this);
@@ -28,13 +29,12 @@ export default class Grid extends React.Component {
    componentDidMount(){
     axios.get(`https://api.punkapi.com/v2/beers`)
       .then(res => {
-          debugger;
             const data = res.data;
             this.setState({ data }, () => {
                 this.setDefaultFilters();
                 setTimeout(() => {
                     this.displayPage(1, 0, 4);
-                }, 1000);
+                }, 500);
             });
       })
     }
@@ -52,13 +52,12 @@ export default class Grid extends React.Component {
 
             criteriaList.push(date);
         });
-        debugger;
         criteriaList.sort(function(a,b){
             return a - b
         });
 
         let formattedFilterCriteriaList = this.formatCriteriaList(criteriaList);
-        debugger;
+
         this.setState({
             filterCriteriaList: formattedFilterCriteriaList,
             filterFrom: formattedFilterCriteriaList[0],
@@ -74,29 +73,30 @@ export default class Grid extends React.Component {
             let stringDate = month.toString() + "/" + year.toString();
             formattedList.push(stringDate)
         });
-        debugger;
         return formattedList;
     }
 
     filterData(from, to){
-        debugger;
+        let formattedFrom = this.formatDateCriteria(from.split("/"));
+        let formattedTo = this.formatDateCriteria(to.split("/"));
+
+        let filteredData = this.state.data.filter((item) => {
+            let criteria = item.first_brewed.split("/");
+            let date = this.formatDateCriteria(criteria);
+
+            return date >= formattedFrom && date <= formattedTo;
+        });
+
         this.setState({
             filterFrom: from,
-            filterTo: to
+            filterTo: to,
+            filteredData: filteredData,
+            pageNumber: 1
         }, () => {
-            let formattedFrom = this.formatDateCriteria(from.split("/"));
-            let formattedTo = this.formatDateCriteria(to.split("/"));
-            debugger;
-            let filteredData = this.state.data.filter((item) => {
-                let criteria = item.first_brewed.split("/");
-                let date = this.formatDateCriteria(criteria);
+            let lastItemIndex = (this.state.pageNumber * 4);
+            let firstItemIndex = (lastItemIndex - 4);
 
-                return (date >= formattedFrom) && (date <= formattedTo);
-            });
-            debugger;
-            this.setState({
-                filteredData: filteredData
-            });
+            this.displayPage(this.state.pageNumber, firstItemIndex, lastItemIndex)
         });
     }
 
@@ -110,25 +110,27 @@ export default class Grid extends React.Component {
     }
 
     displayPage(pageNumber, firstItemIndex, lastItemIndex){
-        debugger;
         let paginatedData = this.state.filteredData.slice(firstItemIndex, lastItemIndex);
 
         this.setState({
-            paginatedData: paginatedData
+            paginatedData: paginatedData,
+            pageNumber: pageNumber
         });
     }
 
     render() {
         return (
-            <div>
+            <div className="gridContainer">
                 <Filter from={this.state.filterFrom} to={this.state.filterTo} filterList={this.state.filterCriteriaList} applyFilter={(from, to) => this.filterData(from, to)}/>
-                {
-                    this.state.paginatedData.map((item, i) => {
-                        return(
-                            <GridItem key={i} item={item} />
-                        )
-                    })
-                }
+                <div className="gridRow row">
+                    {
+                        this.state.paginatedData.map((item, i) => {
+                            return(
+                                <GridItem key={i} item={item} />
+                            )
+                        })
+                    }
+                </div>
                 <Paginator itemsPerPage={4} itemTotalCount={this.state.filteredData.length} displayPage={(pageNumber, firstItemIndex, lastItemIndex) => this.displayPage(pageNumber, firstItemIndex, lastItemIndex)}/>
             </div>
         )

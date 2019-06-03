@@ -1,0 +1,25 @@
+.paginatorContainer{
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 25px;
+    background-color: lightgray;
+}
+
+.paginator{
+    padding: 5px;
+}
+
+.paginatorLabel{
+    font-size: 12px;
+    font-weight: 500;
+    padding: 5px;
+}
+
+.paginatorButton{
+    font-size: 12px;
+    margin: 2px;
+    height: 30px;
+    width: 40px;
+}

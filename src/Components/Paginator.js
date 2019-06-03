@@ -19,7 +19,6 @@ export default class Paginator extends React.Component {
    }
 
    componentWillReceiveProps(nextProps){
-       debugger;
        let pageCount = Math.ceil(nextProps.itemTotalCount / nextProps.itemsPerPage);
        let pageNumbers = [];
        for (let i = 1; i <= pageCount; i++) {
@@ -35,14 +34,12 @@ export default class Paginator extends React.Component {
    }
 
    setCurrentPage(pageNumber){
-       debugger;
        this.setState({
            currentPage: pageNumber
        }, () => this.handlePageSelection());
    }
 
    handlePageSelection(){
-       debugger;
     let lastItemIndex = (this.state.currentPage * this.state.itemsPerPage);
     let firstItemIndex = (lastItemIndex - this.state.itemsPerPage);
 
@@ -51,14 +48,19 @@ export default class Paginator extends React.Component {
 
     render() {
          return (
-            <div>
-                {
-                    this.state.pageNumbers.map((number, i) => {
-                        return(
-                            <button id={number} key={i} onClick={(e) => this.setCurrentPage(e.target.id)}>{number}</button>
-                        );
-                    })
-                }
+            <div className="paginatorContainer">
+                <div className="paginator">
+                    <label className="paginatorLabel">
+                        Pages:
+                    </label>
+                    {
+                        this.state.pageNumbers.map((number, i) => {
+                            return(
+                                <button className="paginatorButton" id={number} key={i} onClick={(e) => this.setCurrentPage(e.target.id)}>{number}</button>
+                            );
+                        })
+                    }
+                </div>
             </div>
          );
     }

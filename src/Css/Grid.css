@@ -1,0 +1,13 @@
+.gridContainer{
+    height: calc(100% - 120px);
+    width: 100%;
+    padding: 25px 0px 25px 0px;
+    background-color: #1c0000;
+}
+
+.gridRow{
+    height: calc(100% - 70px);
+    width: 100%;
+    justify-content: space-evenly;
+    align-items: center;
+}
